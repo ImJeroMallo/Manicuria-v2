@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reservá tu turno</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <header class="hero">
+
+            <h1>✨ Atenea Nails ✨</h1>
+
+        </header>
+
+        <h2>💅 Reservá tu turno 💅</h2>
+
+        <input type="text" id="nombre" placeholder="Nombre">
+
+        <input type="text" id="telefono" placeholder="Teléfono de contacto">
+
+        <select id="servicio">
+
+            <option value="">
+                Seleccione un servicio
+            </option>
+
+            <option value="18000">
+                Soft Gel $18.000
+            </option>
+
+            <option value="15000">
+                Capping $15.000
+            </option>
+
+            <option value="12000">
+                Semipermanente / Esmaltado $12.000
+            </option>
+
+        </select>
+
+        <input type="date" id="fecha">
+
+        <select id="hora">
+            <option value="">
+                Seleccione un horario
+            </option>
+            <option>07:30hs</option>
+            <option>09:30hs</option>
+            <option>13:30hs</option>
+            <option>15:30hs</option>
+            <option>17:30hs</option>
+        </select>
+        <p id="estadoHorarios"></p>
+
+        <button id="btnReservar" onclick="reservar()">
+            Pagar seña y reservar
+        </button>
+        <p id="mensaje"></p>
+        <button onclick="enviarWhatsApp()">
+            Ya pagué la seña
+        </button>
+        <hr>
+
+    </div>
+
+    <script type="module" src="js/index.js"></script>
+
+</body>
+
+</html>

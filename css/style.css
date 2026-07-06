@@ -1,0 +1,144 @@
+body {
+
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    background: linear-gradient(135deg,
+            #ffe6f1,
+            #fff,
+            #f2e7ff);
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 40px;
+
+}
+
+.container {
+
+    width: 100%;
+
+    max-width: 520px;
+
+    margin: 0 auto;
+
+}
+
+.hero {
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+}
+
+.hero h1 {
+
+    color: #d63384;
+
+    margin-bottom: 10px;
+
+    font-size: 34px;
+
+}
+
+.hero p {
+
+    color: #666;
+
+    font-size: 17px;
+
+}
+
+.card {
+
+    background: white;
+
+    border-radius: 25px;
+
+    padding: 30px;
+
+    box-shadow:
+
+        0 15px 40px rgba(0, 0, 0, .12);
+
+}
+
+input,
+select {
+
+    width: 100%;
+
+    padding: 14px;
+
+    margin-top: 8px;
+
+    margin-bottom: 20px;
+
+    border-radius: 12px;
+
+    border: 2px solid #f3b6d2;
+
+    font-size: 16px;
+
+    box-sizing: border-box;
+
+    transition: .3s;
+
+}
+
+input:focus,
+select:focus {
+
+    outline: none;
+
+    border-color: #d63384;
+
+    box-shadow:
+
+        0 0 10px rgba(214, 51, 132, .3);
+
+}
+
+button {
+
+    width: 100%;
+
+    background: linear-gradient(135deg,
+            #ff5fa2,
+            #d63384);
+
+    color: white;
+
+    border: none;
+
+    padding: 16px;
+
+    border-radius: 15px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+
+        0 8px 20px rgba(214, 51, 132, .35);
+
+}

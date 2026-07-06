@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Panel de Administrador</title>
+    <link rel="stylesheet" href="css/admin.css">
+
+</head>
+
+<body>
+
+    <h1>Panel de Administrador</h1>
+
+    <div class="buscador">
+
+        <label><strong>Buscar turnos por fecha</strong></label>
+
+        <input type="date" id="buscarFecha">
+
+        <button id="btnBuscar">
+
+            🔍 Buscar
+
+        </button>
+
+        <button id="btnHoy">
+
+            📅 Hoy
+
+        </button>
+
+    </div>
+
+    <div id="listaTurnos"></div>
+    <div id="modalTurno" class="modal">
+
+        <div class="modal-contenido">
+
+            <h2 id="tituloModal">
+
+                Turno
+
+            </h2>
+
+            <input id="modalNombre" type="text" placeholder="Nombre">
+
+            <input id="modalTelefono" type="text" placeholder="Teléfono">
+
+            <select id="modalServicio">
+
+                <option value="18000">
+
+                    Soft Gel
+
+                </option>
+
+                <option value="15000">
+
+                    Capping
+
+                </option>
+
+                <option value="12000">
+
+                    Semipermanente / Esmaltado
+
+                </option>
+
+            </select>
+
+            <input id="modalPrecio" type="number">
+
+            <input id="modalFecha" type="date">
+
+            <select id="modalHora"></select>
+
+            <select id="modalEstado">
+
+                <option>Pendiente</option>
+
+                <option>Confirmado</option>
+
+                <option>Realizado</option>
+
+                <option>Cancelado</option>
+
+            </select>
+
+            <div class="acciones-modal">
+
+                <button id="btnGuardarModal">
+
+                    Guardar
+
+                </button>
+
+                <button id="btnCancelarModal">
+
+                    Cancelar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script type="module" src="js/admin.js"></script>
+
+</body>
+
+</html>
