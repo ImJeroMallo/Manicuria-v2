@@ -231,119 +231,72 @@ async function buscarAgenda() {
 
         if (turno) {
 
-            lista.innerHTML += `
+            lista.innerHTML += crearTarjetaTurno(
+                turno,
+                documento.id
+            );
+            <div class="acciones">
 
-        <div class="turno"
-        style="border-left:8px solid ${obtenerColorEstado(turno.estado)}">
+                <button
+                    class="btn-confirmar"
+                    onclick="cambiarEstado('${turno.id}','Confirmado')">
 
-            <h2>
+                    ✅ Confirmar
 
-                🕒 ${hora}
+                </button>
 
-            </h2>
+                <button
+                    class="btn-realizado"
+                    onclick="cambiarEstado('${turno.id}','Realizado')">
 
-            <p>
+                    ✔ Realizado
 
-                👤 <strong>${turno.nombre}</strong>
+                </button>
 
-            </p>
+                <button
+                    class="btn-cancelar"
+                    onclick="cambiarEstado('${turno.id}','Cancelado')">
 
-            <p>
+                    ❌ Cancelar
 
-                📞 ${turno.telefono}
+                </button>
 
-            </p>
+                <button
+                    class="btn-eliminar"
+                    onclick="eliminarTurno('${turno.id}')">
 
-            <p>
+                    🗑 Eliminar
 
-                💅 ${turno.servicio}
+                </button>
 
-            </p>
+                <button
+                    class="btn-mover"
+                    data-id="${turno.id}">
 
-            <p>
+                    🔄 Mover
 
-                💰 $${turno.precio.toLocaleString("es-AR")}
-
-            </p>
-
-            <div style="margin:15px 0;">
-
-                <span
-                style="
-                    background:${obtenerColorEstado(turno.estado)};
-                    color:white;
-                    padding:8px 18px;
-                    border-radius:20px;
-                    font-weight:bold;
-                ">
-
-                    ${turno.estado}
-
-                </span>
+                </button>
 
             </div>
-<div class="acciones">
 
-    <button
-    class="btn-confirmar"
-    onclick="cambiarEstado('${turno.id}','Confirmado')">
+        </div >
 
-        ✅ Confirmar
-
-    </button>
-
-    <button
-    class="btn-realizado"
-    onclick="cambiarEstado('${turno.id}','Realizado')">
-
-        ✔ Realizado
-
-    </button>
-
-    <button
-    class="btn-cancelar"
-    onclick="cambiarEstado('${turno.id}','Cancelado')">
-
-        ❌ Cancelar
-
-    </button>
-
-    <button
-    class="btn-eliminar"
-    onclick="eliminarTurno('${turno.id}')">
-
-        🗑 Eliminar
-
-    </button>
-
-    <button
-class="btn-mover"
-data-id="${turno.id}">
-
-🔄 Mover
-
-</button>
-
-</div>
-
-        </div>
-
-    `;
+                `;
 
         }
         else {
 
             lista.innerHTML += `
 
-                <div class="turno">
+                < div class="turno" >
 
                     <h2>🕒 ${hora}</h2>
 
                     <h3>⚪ Disponible</h3>
 
-                </div>
+                </div >
 
-            `;
+                `;
 
         }
 
@@ -365,7 +318,7 @@ function mostrarHoy() {
     ).padStart(2, "0");
 
     document.getElementById("buscarFecha").value =
-        `${año}-${mes}-${dia}`;
+        `${ año } -${ mes } -${ dia } `;
 
     buscarAgenda();
 

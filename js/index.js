@@ -1,3 +1,4 @@
+import { HORARIOS, SERVICIOS } from "./config.js";
 import { db } from "./firebase.js";
 import { guardarTurno } from "./turnos.js";
 import { abrirMercadoPago, limpiarFormulario } from "./utils.js";
@@ -8,20 +9,42 @@ import {
     getDocs
 }
     from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
-const horariosDisponibles = [
-    "07:30hs",
-    "09:30hs",
-    "13:30hs",
-    "15:30hs",
-    "17:30hs"
-];
+function cargarServicios() {
 
-document
-    .getElementById("fecha")
-    .addEventListener(
-        "change",
-        actualizarHorarios
-    );
+    const select =
+        document.getElementById("servicio");
+
+    select.innerHTML = `
+        <option value="">
+            Seleccione un servicio
+        </option>
+    `;
+
+    SERVICIOS.forEach((servicio) => {
+
+        select.innerHTML += `
+            <option value="${servicio.precio}">
+                ${servicio.nombre}
+            </option>
+        `;
+
+    });
+
+}
+function iniciarPagina() {
+
+    cargarServicios();
+
+    document
+        .getElementById("fecha")
+        .addEventListener(
+            "change",
+            actualizarHorarios
+        );
+
+}
+
+iniciarPagina();
 function leerFormulario() {
 
     const nombre =
@@ -135,7 +158,7 @@ async function actualizarHorarios() {
     });
 
     const disponibles =
-        horariosDisponibles.length - ocupados.length;
+        HORARIOS.length - ocupados.length;
 
     const estado =
         document.getElementById("estadoHorarios");
@@ -172,7 +195,7 @@ async function actualizarHorarios() {
         </option>
     `;
 
-    horariosDisponibles.forEach((hora) => {
+    HORARIOS.forEach((hora) => {
 
         if (!ocupados.includes(hora)) {
 
@@ -205,7 +228,7 @@ function enviarWhatsApp() {
         document.getElementById("hora").value;
 
     let mensaje =
-        `Hola, soy ${nombre}. Ya realicé el pago de la seña. Mi turno es para ${fecha} a las ${hora}. Servicio: ${servicio}.`;
+        `Hola, soy ${nombre}. Ya realicé el pago de la seña. Mí turno es para ${fecha} a las ${hora}. Servicio: ${servicio}.`;
 
     window.open(
         "https://wa.me/5493482203579?text=" +
