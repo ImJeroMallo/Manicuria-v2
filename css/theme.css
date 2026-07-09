@@ -1,0 +1,39 @@
+:root {
+
+    /* Colores principales */
+
+    --rosa: #E91E63;
+    --rosa-claro: #FF5CA8;
+
+    /* Fondo */
+
+    --negro: #161616;
+    --gris: #242424;
+    --gris-claro: #3A3A3A;
+
+    /* Texto */
+
+    --blanco: #FFFFFF;
+    --texto: #EAEAEA;
+    --texto-secundario: #BDBDBD;
+
+    /* Estados */
+
+    --verde: #2ECC71;
+    --azul: #3498DB;
+    --rojo: #E74C3C;
+    --amarillo: #F1C40F;
+
+    /* Bordes */
+
+    --borde: #3C3C3C;
+
+    /* Sombras */
+
+    --sombra: 0 10px 25px rgba(0, 0, 0, .30);
+
+    /* Radios */
+
+    --radio: 18px;
+
+}

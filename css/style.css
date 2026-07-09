@@ -1,144 +1,109 @@
 body {
-
+    background: red !important;
     margin: 0;
-
-    font-family: Arial, sans-serif;
-
-    background: linear-gradient(135deg,
-            #ffe6f1,
-            #fff,
-            #f2e7ff);
-
+    font-family: "Poppins", sans-serif;
+    background: var(--negro);
+    color: var(--texto);
     min-height: 100vh;
-
     display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    padding: 40px;
-
+    align-items: flex-start;
+    padding: 50px 40px;
+    transition: .3s;
 }
 
 .container {
-
     width: 100%;
-
     max-width: 520px;
-
     margin: 0 auto;
-
 }
 
 .hero {
-
     text-align: center;
-
-    margin-bottom: 30px;
-
+    margin-bottom: 40px;
 }
 
 .hero h1 {
-
-    color: #d63384;
-
-    margin-bottom: 10px;
-
-    font-size: 34px;
-
+    color: var(--rosa);
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
 .hero p {
-
-    color: #666;
-
-    font-size: 17px;
-
+    color: var(--texto-secundario);
+    font-size: 16px;
+    line-height: 24px;
 }
 
 .card {
+    background: var(--gris);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 35px;
+    animation: aparecer .4s ease;
+}
 
-    background: white;
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-    border-radius: 25px;
-
-    padding: 30px;
-
-    box-shadow:
-
-        0 15px 40px rgba(0, 0, 0, .12);
-
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 input,
 select {
-
     width: 100%;
-
-    padding: 14px;
-
-    margin-top: 8px;
-
-    margin-bottom: 20px;
-
-    border-radius: 12px;
-
-    border: 2px solid #f3b6d2;
-
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 18px;
+    border-radius: 14px;
+    background: var(--gris);
+    color: var(--texto);
+    border: 1px solid var(--borde);
     font-size: 16px;
-
     box-sizing: border-box;
-
-    transition: .3s;
-
+    transition: .25s;
 }
 
 input:focus,
 select:focus {
-
     outline: none;
-
-    border-color: #d63384;
-
-    box-shadow:
-
-        0 0 10px rgba(214, 51, 132, .3);
-
+    border-color: var(--rosa);
+    box-shadow: 0 0 12px rgba(233, 30, 99, .35);
+    transform: translateY(-1px);
 }
 
 button {
-
     width: 100%;
-
     background: linear-gradient(135deg,
-            #ff5fa2,
-            #d63384);
-
+            var(--rosa-claro),
+            var(--rosa));
     color: white;
-
     border: none;
-
     padding: 16px;
-
     border-radius: 15px;
-
     font-size: 17px;
-
     font-weight: bold;
-
     cursor: pointer;
-
     transition: .3s;
-
 }
 
 button:hover {
-
-    transform: translateY(-2px);
-
+    transform: translateY(-3px) scale(1.02);
     box-shadow:
-
         0 8px 20px rgba(214, 51, 132, .35);
+    letter-spacing: .5px;
+}
 
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: var(--texto);
 }

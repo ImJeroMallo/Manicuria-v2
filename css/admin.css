@@ -1,26 +1,16 @@
 body {
 
-    font-family: Arial, sans-serif;
+    background: var(--negro);
 
-    background: #f7f7fb;
-
-    padding: 30px;
+    color: var(--texto);
 
 }
 
 .turno {
 
-    background: rgb(255, 255, 255);
+    background: var(--gris);
 
-    border-radius: 15px;
-
-    padding: 20px;
-
-    margin: 15px 0;
-
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
-
-    transition: .3s;
+    color: var(--texto);
 
 }
 
@@ -36,7 +26,7 @@ button {
 
     cursor: pointer;
 
-    color: rgb(0, 0, 0);
+    color: var(--blanco);
 
     font-weight: bold;
 
@@ -52,7 +42,9 @@ button:hover {
 
 .dia {
 
-    background: linear-gradient(135deg, #d63384, #ff7eb6);
+    background: linear-gradient(135deg,
+            var(--rosa),
+            var(--rosa-claro));
 
     color: rgb(255, 255, 255);
 
@@ -170,15 +162,8 @@ button:hover {
 
 .modal-contenido {
 
-    background: white;
-
-    width: 420px;
-
-    max-width: 90%;
-
-    border-radius: 20px;
-
-    padding: 25px;
+    background: var(--gris);
+    color: var(--texto);
 
 }
 
@@ -191,5 +176,77 @@ button:hover {
     gap: 10px;
 
     margin-top: 20px;
+
+}
+
+.turno-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+
+}
+
+.turno-header h2 {
+
+    margin: 0;
+
+    color: var(--blanco);
+
+    font-size: 24px;
+
+}
+
+.estado {
+
+    color: white;
+
+    padding: 8px 16px;
+
+    border-radius: 20px;
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+}
+
+.turno-body {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+.turno-body h3 {
+
+    margin: 0;
+
+    color: #333;
+
+}
+
+.turno-body p {
+
+    margin: 0;
+
+    color: var(--texto-secundario);
+
+}
+
+.precio {
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    color: var(--rosa-claro);
 
 }
