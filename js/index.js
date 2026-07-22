@@ -1,15 +1,9 @@
 let ultimoTurno = null;
-import { HORARIOS, SERVICIOS } from "./config.js";
+import { HORARIOS, SERVICIOS, DIAS_TRABAJO } from "./config.js";
 import { db } from "./firebase.js";
 import { guardarTurno } from "./turnos.js";
 import { abrirMercadoPago, limpiarFormulario } from "./utils.js";
-import {
-    collection,
-    query,
-    where,
-    getDocs
-}
-    from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 function cargarServicios() {
 
     const select =
@@ -145,6 +139,35 @@ async function actualizarHorarios() {
         document.getElementById("fecha").value;
 
     if (!fecha) return;
+
+    const fechaSeleccionada = new Date(fecha);
+
+    const diaSemana = fechaSeleccionada.getDay();
+
+    if (!DIAS_TRABAJO.includes(diaSemana)) {
+
+        estado.innerHTML =
+            "❌ Ese día no hay atención.";
+
+        estado.style.color = "red";
+
+        boton.disabled = true;
+
+        document.getElementById("fecha").value = "";
+
+        document.getElementById("hora").innerHTML = `
+        <option value="">
+            Seleccione un horario
+        </option>
+    `;
+
+        document.getElementById("estadoHorarios").innerHTML = "";
+
+        document.getElementById("btnReservar").disabled = true;
+
+        return;
+
+    }
 
     const consulta = query(
         collection(db, "turnos"),

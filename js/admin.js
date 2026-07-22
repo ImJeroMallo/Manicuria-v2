@@ -4,9 +4,10 @@ import { eliminarTurno, cambiarEstado, obtenerTurnos } from "./turnos.js";
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { HORARIOS } from "./config.js";
+import { obtenerConfiguracion, guardarDiasTrabajo } from "./configuracion.js";
 onAuthStateChanged(
     auth,
-    (user) => {
+    async (user) => {
 
         if (!user) {
 
@@ -14,8 +15,8 @@ onAuthStateChanged(
                 "login.html";
             return;
         }
-
         mostrarHoy();
+        await cargarDiasTrabajo();
         document
             .getElementById("btnBuscar")
             .addEventListener(
@@ -33,6 +34,12 @@ onAuthStateChanged(
             .addEventListener(
                 "click",
                 cerrarModal
+            );
+        document
+            .getElementById("btnGuardarDias")
+            .addEventListener(
+                "click",
+                guardarConfiguracionDias
             );
 
     }
@@ -112,8 +119,46 @@ function mostrarHoy() {
     buscarAgenda();
 
 }
-window.moverHorario = moverHorario;
+async function cargarDiasTrabajo() {
 
+    const configuracion =
+        await obtenerConfiguracion();
+
+    if (!configuracion) return;
+
+    const dias =
+        configuracion.diasTrabajo || [];
+
+    document
+        .querySelectorAll("#diasTrabajo input")
+        .forEach((checkbox) => {
+
+            checkbox.checked =
+                dias.includes(Number(checkbox.value));
+
+        });
+
+}
+async function guardarConfiguracionDias() {
+
+    const dias = [];
+
+    document
+        .querySelectorAll("#diasTrabajo input:checked")
+        .forEach((checkbox) => {
+
+            dias.push(
+                Number(checkbox.value)
+            );
+
+        });
+
+    await guardarDiasTrabajo(dias);
+
+    alert("Configuración guardada correctamente.");
+
+}
+window.moverHorario = moverHorario;
 function moverHorario(turno) {
 
     abrirModal("mover", turno);
