@@ -1,0 +1,93 @@
+.card {
+    background: #242424;
+    border: 1px solid #383838;
+    border-radius: 22px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
+    animation: aparecer .4s ease;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 18px;
+    border-radius: 14px;
+    background: var(--gris);
+    color: var(--texto);
+    border: 1px solid var(--borde);
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: .25s;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--rosa);
+    box-shadow: 0 0 12px rgba(233, 30, 99, .35);
+    transform: translateY(-1px);
+}
+
+button {
+    width: 100%;
+    background: linear-gradient(135deg,
+            var(--rosa-claro),
+            var(--rosa));
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 15px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s;
+}
+
+button:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow:
+        0 8px 20px rgba(214, 51, 132, .35);
+    letter-spacing: .5px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: var(--texto);
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-secundario {
+    background: transparent;
+    color: var(--rosa);
+    border: 2px solid var(--rosa);
+}
+
+.btn-secundario:hover {
+    background: var(--rosa);
+    color: white;
+}
+
+.botones {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.botones button {
+    flex: 1;
+}

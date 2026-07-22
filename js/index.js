@@ -1,3 +1,4 @@
+let ultimoTurno = null;
 import { HORARIOS, SERVICIOS } from "./config.js";
 import { db } from "./firebase.js";
 import { guardarTurno } from "./turnos.js";
@@ -115,13 +116,15 @@ function leerFormulario() {
 async function reservar() {
 
     try {
+
         const turno = leerFormulario();
+
+        ultimoTurno = turno;
 
         await guardarTurno(turno);
 
-        limpiarFormulario();
-
         alert("Turno enviado correctamente");
+
         console.log("Abriendo Mercado Pago...");
 
         abrirMercadoPago();
@@ -132,7 +135,9 @@ async function reservar() {
         console.error(error);
 
         alert(error.message);
+
     }
+
 }
 async function actualizarHorarios() {
 
@@ -213,28 +218,42 @@ async function actualizarHorarios() {
 
 function enviarWhatsApp() {
 
-    let nombre =
-        document.getElementById("nombre").value;
+    if (!ultimoTurno) {
 
-    let servicio =
-        document.getElementById("servicio").options[
-            document.getElementById("servicio").selectedIndex
-        ].text;
+        alert("Primero debes reservar un turno.");
 
-    let fecha =
-        document.getElementById("fecha").value;
+        return;
 
-    let hora =
-        document.getElementById("hora").value;
+    }
 
-    let mensaje =
-        `Hola, soy ${nombre}. Ya realicé el pago de la seña. Mí turno es para ${fecha} a las ${hora}. Servicio: ${servicio}.`;
+    const mensaje =
+        `Hola, soy ${ultimoTurno.nombre}. Ya realicé el pago de la seña. Mí turno es para ${ultimoTurno.fecha} a las ${ultimoTurno.hora}. Servicio: ${ultimoTurno.servicio}.`;
 
     window.open(
         "https://wa.me/5493482203579?text=" +
         encodeURIComponent(mensaje),
         "_blank"
     );
+
+    limpiarFormulario();
+
+    ultimoTurno = null;
+
 }
+function configurarCalendario() {
+
+    const hoy = new Date();
+
+    const año = hoy.getFullYear();
+
+    const mes = String(hoy.getMonth() + 1).padStart(2, "0");
+
+    const dia = String(hoy.getDate()).padStart(2, "0");
+
+    document.getElementById("fecha").min =
+        `${año}-${mes}-${dia}`;
+
+}
+configurarCalendario();
 window.reservar = reservar;
 window.enviarWhatsApp = enviarWhatsApp;
