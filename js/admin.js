@@ -3,7 +3,6 @@ import { crearAgendaDia } from "./agenda.js";
 import { eliminarTurno, cambiarEstado, obtenerTurnos } from "./turnos.js";
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
-import { HORARIOS } from "./config.js";
 import { obtenerConfiguracion, guardarDiasTrabajo } from "./configuracion.js";
 onAuthStateChanged(
     auth,
@@ -141,17 +140,19 @@ async function cargarDiasTrabajo() {
 }
 async function guardarConfiguracionDias() {
 
+    console.log("Entró a guardarConfiguracionDias");
+
     const dias = [];
 
     document
         .querySelectorAll("#diasTrabajo input:checked")
         .forEach((checkbox) => {
 
-            dias.push(
-                Number(checkbox.value)
-            );
+            dias.push(Number(checkbox.value));
 
         });
+
+    console.log(dias);
 
     await guardarDiasTrabajo(dias);
 

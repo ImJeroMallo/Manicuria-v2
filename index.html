@@ -26,16 +26,14 @@
             <input type="text" id="telefono" placeholder="Teléfono de contacto">
             <select id="servicio"></select>
             <input type="date" id="fecha">
-            <select id="hora">
-                <option value="">
-                    Seleccione un horario
-                </option>
-                <option>07:30hs</option>
-                <option>09:30hs</option>
-                <option>13:30hs</option>
-                <option>15:30hs</option>
-                <option>17:30hs</option>
-            </select>
+            <h3 class="seccion-formulario">
+                🕒 Horarios disponibles
+            </h3>
+            <div id="horarios" class="horarios-grid"></div>
+            <input type="hidden" id="hora">
+            <div id="resumenSeleccion" class="resumen-seleccion">
+                Aún no seleccionaste un horario.
+            </div>
             <p id="estadoHorarios"></p>
             <div class="botones">
 
@@ -49,6 +47,43 @@
 
             </div>
             <hr>
+        </div>
+        <div id="modalResumen" class="modal">
+
+            <div class="modal-contenido">
+
+                <div class="modal-header">
+
+                    <img src="img/logo.jpg" class="logo-modal" alt="Atenea Nails">
+
+                    <h2>🧾 Resumen de tu reserva</h2>
+
+                    <p>
+                        Revisá que los datos sean correctos antes de continuar con el pago.
+                    </p>
+
+                </div>
+
+                <div id="contenidoResumen"></div>
+
+                <div class="acciones-modal">
+
+                    <button id="btnCancelarResumen" class="btn-secundario">
+
+                        Cancelar
+
+                    </button>
+
+                    <button id="btnConfirmarResumen">
+
+                        Confirmar y pagar
+
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
     </div>
     <script type="module" src="js/index.js"></script>

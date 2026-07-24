@@ -15,17 +15,17 @@ export const HORARIOS = [
 export const SERVICIOS = [
 
     {
-        nombre: "Soft Gel $18.000",
+        nombre: "Soft Gel",
         precio: 18000
     },
 
     {
-        nombre: "Capping $15.000",
+        nombre: "Capping",
         precio: 15000
     },
 
     {
-        nombre: "Semipermanente / Esmaltado $12.000",
+        nombre: "Semipermanente / Esmaltado",
         precio: 12000
     }
 

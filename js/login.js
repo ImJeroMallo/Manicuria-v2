@@ -1,5 +1,4 @@
-import { db, auth }
-    from "./firebase.js";
+import { db, auth } from "./firebase.js";
 async function login() {
 
     const email =

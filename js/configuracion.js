@@ -11,7 +11,6 @@ export async function obtenerConfiguracion() {
     return documento.data();
 
 }
-
 export async function guardarDiasTrabajo(diasTrabajo) {
 
     const referencia =

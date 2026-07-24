@@ -1,9 +1,13 @@
 let ultimoTurno = null;
-import { HORARIOS, SERVICIOS, DIAS_TRABAJO } from "./config.js";
+let turnoPendiente = null;
+let diasTrabajo = [];
+import { mostrarToast } from "./toast.js";
+import { HORARIOS, SERVICIOS } from "./config.js";
 import { db } from "./firebase.js";
 import { guardarTurno } from "./turnos.js";
-import { abrirMercadoPago, limpiarFormulario } from "./utils.js";
+import { abrirMercadoPago, limpiarFormulario, formatearFecha } from "./utils.js";
 import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { obtenerConfiguracion } from "./configuracion.js";
 function cargarServicios() {
 
     const select =
@@ -29,12 +33,26 @@ function cargarServicios() {
 function iniciarPagina() {
 
     cargarServicios();
+    configurarCalendario();
 
     document
         .getElementById("fecha")
         .addEventListener(
             "change",
             actualizarHorarios
+        );
+    document
+        .getElementById("btnConfirmarResumen")
+        .addEventListener(
+            "click",
+            confirmarReserva
+        );
+
+    document
+        .getElementById("btnCancelarResumen")
+        .addEventListener(
+            "click",
+            cerrarResumen
         );
 
 }
@@ -113,38 +131,111 @@ async function reservar() {
 
         const turno = leerFormulario();
 
-        ultimoTurno = turno;
+        const disponible =
+            await horarioDisponible(
+                turno.fecha,
+                turno.hora
+            );
 
-        await guardarTurno(turno);
+        if (!disponible) {
 
-        alert("Turno enviado correctamente");
+            mostrarToast(
+                "❌ Ese horario acaba de ser reservado.", "error"
+            );
 
-        console.log("Abriendo Mercado Pago...");
+            await actualizarHorarios();
 
-        abrirMercadoPago();
+            return;
+
+        }
+
+        turnoPendiente = turno;
+
+        mostrarResumen(turno);
 
     }
     catch (error) {
 
-        console.error(error);
-
-        alert(error.message);
+        mostrarToast(
+            error.message,
+            "error"
+        );
 
     }
 
 }
+async function confirmarReserva() {
+
+    const botonCancelar =
+        document.getElementById("btnCancelarResumen");
+
+    if (!turnoPendiente)
+        return;
+
+    const boton =
+        document.getElementById("btnConfirmarResumen");
+
+    boton.disabled = true;
+    botonCancelar.disabled = true;
+    boton.innerHTML = "⏳ Guardando turno...";
+    try {
+
+        await guardarTurno(turnoPendiente);
+
+        ultimoTurno = turnoPendiente;
+
+        turnoPendiente = null;
+
+        cerrarResumen();
+
+        mostrarToast(
+            "✅ Turno reservado correctamente."
+        );
+
+        boton.innerHTML = "✅ Redirigiendo...";
+
+        await new Promise(resolve =>
+            setTimeout(resolve, 1000)
+        );
+        abrirMercadoPago();
+        limpiarFormulario();
+    }
+    catch (error) {
+
+        mostrarToast(
+            error.message,
+            "error"
+        );
+
+    }
+    finally {
+        boton.disabled = false;
+
+        boton.innerHTML =
+            "Confirmar y pagar";
+        botonCancelar.disabled = false;
+    }
+
+}
+
 async function actualizarHorarios() {
 
+    const resumen =
+        document.getElementById("resumenSeleccion");
+    resumen.classList.remove("activo");
+    resumen.innerHTML =
+        "Aún no seleccionaste un horario.";
     const fecha =
         document.getElementById("fecha").value;
-
     if (!fecha) return;
-
+    const estado =
+        document.getElementById("estadoHorarios");
+    const boton =
+        document.getElementById("btnReservar");
     const fechaSeleccionada = new Date(fecha);
-
     const diaSemana = fechaSeleccionada.getDay();
 
-    if (!DIAS_TRABAJO.includes(diaSemana)) {
+    if (!diasTrabajo.includes(diaSemana)) {
 
         estado.innerHTML =
             "❌ Ese día no hay atención.";
@@ -153,17 +244,9 @@ async function actualizarHorarios() {
 
         boton.disabled = true;
 
-        document.getElementById("fecha").value = "";
+        document.getElementById("horarios").innerHTML = "";
 
-        document.getElementById("hora").innerHTML = `
-        <option value="">
-            Seleccione un horario
-        </option>
-    `;
-
-        document.getElementById("estadoHorarios").innerHTML = "";
-
-        document.getElementById("btnReservar").disabled = true;
+        document.getElementById("hora").value = "";
 
         return;
 
@@ -178,105 +261,204 @@ async function actualizarHorarios() {
         await getDocs(consulta);
 
     const ocupados = [];
-
     resultado.forEach((doc) => {
-
         ocupados.push(doc.data().hora);
-
     });
 
-    const disponibles =
-        HORARIOS.length - ocupados.length;
-
-    const estado =
-        document.getElementById("estadoHorarios");
-
-    const boton =
-        document.getElementById("btnReservar");
+    const disponibles = HORARIOS.length - ocupados.length;
 
     if (disponibles === 0) {
-
         estado.innerHTML =
-            "❌ No quedan horarios disponibles para esta fecha";
-
-        estado.style.color = "red";
-
+            "😔 Lo sentimos, ya no quedan turnos disponibles para este día.";
+        estado.style.color = "#ff6b6b";
         boton.disabled = true;
 
     } else {
-
         estado.innerHTML =
-            `✅ Horarios disponibles: ${disponibles}`;
-
-        estado.style.color = "green";
-
+            `✨ Quedan <strong>${disponibles}</strong> horarios disponibles`;
+        estado.style.color = "#2ECC71";
         boton.disabled = false;
-
     }
 
-    const selectHora =
-        document.getElementById("hora");
+    if (ocupados.length === HORARIOS.length) {
+        boton.disabled = true;
+        document.getElementById("horarios").innerHTML =
+            "<p>No hay horarios disponibles.</p>";
+        document.getElementById("hora").value = "";
+        return;
+    }
 
-    selectHora.innerHTML = `
-        <option value="">
-            Seleccione un horario
-        </option>
-    `;
+    mostrarHorarios(ocupados);
 
-    HORARIOS.forEach((hora) => {
+    console.log("Fecha:", fecha);
+    console.log("Cantidad de turnos:", resultado.size);
+    console.log("Horarios ocupados:", ocupados);
+}
+async function horarioDisponible(fecha, hora) {
 
-        if (!ocupados.includes(hora)) {
+    const consulta = query(
+        collection(db, "turnos"),
+        where("fecha", "==", fecha),
+        where("hora", "==", hora)
+    );
 
-            selectHora.innerHTML += `
-                <option value="${hora}">
-                    ${hora}
-                </option>
-            `;
+    const resultado =
+        await getDocs(consulta);
 
-        }
-
-    });
+    return resultado.empty;
 
 }
+async function configurarCalendario() {
 
+    const configuracion =
+        await obtenerConfiguracion();
+
+    if (!configuracion) return;
+
+    diasTrabajo =
+        configuracion.diasTrabajo || [];
+
+    const fecha =
+        document.getElementById("fecha");
+
+    fecha.min =
+        new Date().toISOString().split("T")[0];
+
+}
 function enviarWhatsApp() {
 
     if (!ultimoTurno) {
 
-        alert("Primero debes reservar un turno.");
+        mostrarToast(
+            "Primero debés reservar un turno.", "info"
+        );
 
         return;
 
     }
 
     const mensaje =
-        `Hola, soy ${ultimoTurno.nombre}. Ya realicé el pago de la seña. Mí turno es para ${ultimoTurno.fecha} a las ${ultimoTurno.hora}. Servicio: ${ultimoTurno.servicio}.`;
 
-    window.open(
-        "https://wa.me/5493482203579?text=" +
-        encodeURIComponent(mensaje),
-        "_blank"
-    );
-
+        `Hola 😊. Ya realicé el pago de la seña.
+        👤 Nombre: ${ultimoTurno.nombre}
+        📞 Teléfono: ${ultimoTurno.telefono}
+        📅 Fecha: ${formatearFecha(ultimoTurno.fecha)}
+        🕒 Hora: ${ultimoTurno.hora}
+        💅 Servicio: ${ultimoTurno.servicio}
+        Muchas gracias.`;
+    window.open("https://wa.me/5493482203579?text=" + encodeURIComponent(mensaje), "_blank");
     limpiarFormulario();
-
     ultimoTurno = null;
+}
+function mostrarResumen(turno) {
+
+    const modal =
+        document.getElementById("modalResumen");
+
+    const contenido =
+        document.getElementById("contenidoResumen");
+
+    contenido.innerHTML = `
+
+<div class="resumen-reserva">
+
+    <div class="resumen-item">
+        <span>👤 Cliente</span>
+        <strong>${turno.nombre}</strong>
+    </div>
+
+    <div class="resumen-item">
+        <span>📞 Teléfono</span>
+        <strong>${turno.telefono}</strong>
+    </div>
+
+    <div class="resumen-item">
+        <span>💅 Servicio</span>
+        <strong>${turno.servicio}</strong>
+    </div>
+
+    <div class="resumen-item">
+        <span>📅 Fecha</span>
+        <strong>${formatearFecha(turno.fecha)}</strong>
+    </div>
+
+    <div class="resumen-item">
+        <span>🕒 Hora</span>
+        <strong>${turno.hora}</strong>
+    </div>
+
+    <hr>
+
+    <div class="resumen-item">
+        <span>Total</span>
+        <strong>$${turno.precio.toLocaleString("es-AR")}</strong>
+    </div>
+
+    <div class="resumen-item seña">
+
+        <span>Seña a pagar</span>
+
+        <strong>$5.000</strong>
+
+    </div>
+    <p class="nota-reserva"> 💖 La seña será descontada del precio final del servicio el día de tu turno. </p>
+
+</div>`;
+
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
 
 }
-function configurarCalendario() {
 
-    const hoy = new Date();
+function cerrarResumen() {
 
-    const año = hoy.getFullYear();
-
-    const mes = String(hoy.getMonth() + 1).padStart(2, "0");
-
-    const dia = String(hoy.getDate()).padStart(2, "0");
-
-    document.getElementById("fecha").min =
-        `${año}-${mes}-${dia}`;
-
+    document
+        .getElementById("modalResumen")
+        .style.display = "none";
+    document.body.style.overflow = "auto";
 }
-configurarCalendario();
+function mostrarHorarios(ocupados) {
+    const contenedor =
+        document.getElementById("horarios");
+    contenedor.innerHTML = "";
+    document.getElementById("hora").value = "";
+    HORARIOS.forEach((hora) => {
+        const boton =
+            document.createElement("button");
+        boton.type = "button";
+        boton.className = "horario";
+        if (ocupados.includes(hora)) {
+            boton.classList.add("ocupado");
+            boton.disabled = true;
+            boton.innerHTML =
+                `🔒 ${hora}`;
+        } else {
+            boton.classList.add("disponible");
+            boton.innerHTML =
+                `🟢 ${hora}`;
+            boton.onclick = () => {
+                document
+                    .querySelectorAll(".horario.disponible")
+                    .forEach(b =>
+                        b.classList.remove("activo")
+                    );
+                boton.classList.add("activo");
+                document.getElementById("hora").value = hora;
+                const resumen =
+                    document.getElementById("resumenSeleccion");
+
+                const fecha =
+                    document.getElementById("fecha").value;
+
+                resumen.classList.add("activo");
+
+                resumen.innerHTML = ` <b>✅ Turno seleccionado</b><br>
+                 📅 ${formatearFecha(fecha)}<br>
+                🕒 ${hora} `;
+            };
+        }
+        contenedor.appendChild(boton);
+    });
+}
 window.reservar = reservar;
 window.enviarWhatsApp = enviarWhatsApp;
