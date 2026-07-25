@@ -16,17 +16,26 @@ export const SERVICIOS = [
 
     {
         nombre: "Soft Gel",
-        precio: 18000
+        precio: 18000,
+        descripcion: "aaaaaaaaaaaaaaaaaaaaa"
     },
 
     {
         nombre: "Capping",
-        precio: 15000
+        precio: 15000,
+        descripcion: "aaaaaaaaaaaaaaaaaa"
     },
 
     {
         nombre: "Semipermanente / Esmaltado",
-        precio: 12000
+        precio: 12000,
+        descripcion: "aaaaaaaaaaaaaaaaaa"
+    },
+
+    {
+        nombre: "Esculpidas",
+        precio: 30000,
+        descripcion: "aaaaaaaaaaaaaaaaaa"
     }
 
 ];

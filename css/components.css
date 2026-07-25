@@ -399,3 +399,67 @@ label {
     background: #2ECC71;
     color: white;
 }
+
+/* Clase para ocultar el contenedor principal */
+.oculto {
+    display: none !important;
+}
+
+/* El contenedor que habilita el scroll horizontal */
+.contenedor-ventanas-scroll {
+    display: flex;
+    /* Elementos en fila */
+    flex-direction: row;
+    /* Asegura que sea horizontal */
+    gap: 20px;
+    /* Espacio entre tarjetas */
+    overflow-x: auto;
+    /* Habilita scroll horizontal */
+    -webkit-overflow-scrolling: touch;
+    /* Scroll suave en iOS */
+    padding: 25px 15px;
+    /* Espacio para sombras y bordes */
+
+    /* Opcional: Ocultar la barra de scroll para un aspecto más limpio */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Diseño de cada "ventana" individual (mantiene el estilo anterior, con ajustes) */
+.ventana-servicio {
+    background: #ffffff;
+    border: 2px solid #ff69b4;
+    /* Tu color de la app */
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    text-align: left;
+
+    /* IMPORTANTE: Ancho fijo para que se forme el carrusel y no se achiquen */
+    flex: 0 0 280px;
+    /* No se estira, no se encoge, ancho base de 280px */
+}
+
+/* El título de la ventana simulando la pestaña de arriba */
+.ventana-header {
+    background: #ff69b4;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    position: absolute;
+    top: -15px;
+    left: 15px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* El texto explicativo */
+.ventana-body {
+    margin-top: 15px;
+    color: #444;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}

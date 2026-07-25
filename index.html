@@ -25,6 +25,19 @@
             <input type="text" id="nombre" placeholder="Nombre">
             <input type="text" id="telefono" placeholder="Teléfono de contacto">
             <select id="servicio"></select>
+            <!-- Botón para mostrar/ocultar las ventanas -->
+            <div class="info-servicio-container">
+                <button type="button" id="btnInfoServicios" class="btn-secundario">
+                    🤔 ¿Qué es cada servicio?
+                </button>
+            </div>
+            <!-- Contenedor principal que se muestra/oculta -->
+            <div id="contenedorVentanasServicios" class="oculto">
+                <!-- El contenedor que habilita el scroll horizontal -->
+                <div class="contenedor-ventanas-scroll">
+                    <!-- Las ventanas se generan por JS acá adentro -->
+                </div>
+            </div>
             <div id="calendario" class="calendario"></div>
             <input type="hidden" id="fecha">
             <h3 class="seccion-formulario">
