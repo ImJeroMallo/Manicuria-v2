@@ -37,6 +37,7 @@ async function iniciarPagina() {
     cargarServicios();
     await configurarCalendario();
     await crearCalendario();
+    configurarVentanasServicios();
     document
         .getElementById("btnConfirmarResumen")
         .addEventListener(
@@ -308,9 +309,6 @@ async function obtenerDisponibilidadMes(año, mes) {
         }
         disponibilidad[turno.fecha]++;
     });
-    console.log("Disponibilidad del mes:");
-    console.log(disponibilidad);
-
     return disponibilidad;
 }
 async function horarioDisponible(fecha, hora) {
@@ -606,6 +604,37 @@ function configurarVentanasServicios() {
             botonInfo.innerHTML = "🤔 ¿Qué es cada servicio?";
         }
     });
+    // --- CÓDIGO PARA ARRASTRAR CON EL MOUSE EN PC ---
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    scrollContainer.addEventListener('mousedown', (e) => {
+        isDown = true;
+        scrollContainer.style.cursor = 'grabbing'; // Cambia el cursor a una manito cerrada
+        startX = e.pageX - scrollContainer.offsetLeft;
+        scrollLeft = scrollContainer.scrollLeft;
+    });
+
+    scrollContainer.addEventListener('mouseleave', () => {
+        isDown = false;
+        scrollContainer.style.cursor = 'grab'; // Manito abierta
+    });
+
+    scrollContainer.addEventListener('mouseup', () => {
+        isDown = false;
+        scrollContainer.style.cursor = 'grab';
+    });
+
+    scrollContainer.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - scrollContainer.offsetLeft;
+        const walk = (x - startX) * 1; // El '* 2' es la velocidad del deslizamiento
+        scrollContainer.scrollLeft = scrollLeft - walk;
+    });
+    // Le ponemos el cursor de manito por defecto
+    scrollContainer.style.cursor = 'grab';
 }
 window.reservar = reservar;
 window.enviarWhatsApp = enviarWhatsApp;

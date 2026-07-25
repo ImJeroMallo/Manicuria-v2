@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: "Poppins", sans-serif;
+    font-family: "Poppin", sans-serif;
     background: var(--negro);
     color: var(--texto);
     min-height: 100vh;
@@ -22,7 +22,7 @@ body {
 }
 
 .hero h1 {
-    color: var(--rosa);
+    color: #ffffff;
     font-size: 38px;
     font-weight: 700;
     margin-bottom: 8px;
@@ -42,4 +42,13 @@ body {
     margin-bottom: 20px;
     box-shadow: var(--sombra);
     border: 4px solid var(--rosa);
+}
+
+.titulo-marca {
+    /* Intenta cargar Imprint MT Shadow. Si no la tiene (ej: celulares), usa una fuente serif clásica similar */
+    font-family: 'Imprint MT Shadow', 'Times New Roman', serif;
+    font-size: 2.5rem;
+    /* Ajustá el tamaño como más te guste */
+    color: #ffffff;
+    /* Opcional: el color de tu logo */
 }
