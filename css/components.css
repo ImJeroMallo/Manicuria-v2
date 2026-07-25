@@ -301,3 +301,101 @@ label {
 .toast-info {
     background: #3498DB;
 }
+
+/*==========================
+        CALENDARIO
+==========================*/
+
+.calendario {
+    margin: 20px 0;
+    background: var(--gris);
+    border: 1px solid var(--borde);
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.calendario-header h3 {
+    margin: 0;
+    color: white;
+}
+
+.calendario-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.dia-semana {
+    text-align: center;
+    color: #999;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.dia {
+    aspect-ratio: 1;
+    border: none;
+    border-radius: 12px;
+    background: #2d2d2d;
+    color: white;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.dia:hover {
+    background: #ff5ca8;
+}
+
+.dia.vacio {
+    visibility: hidden;
+}
+
+.dia.activo {
+    transform: scale(1.08);
+    border: 3px solid #ff5ca8;
+    box-shadow: 0 0 18px rgba(255, 92, 168, .5);
+}
+
+.dia.muchos {
+    background: #2ECC71;
+}
+
+.dia.pocos {
+    background: #f1c40f;
+    color: #222;
+}
+
+.dia.pasado {
+    opacity: .35;
+    pointer-events: none;
+    cursor: default;
+    background: #2b2b2b;
+    color: #666;
+}
+
+.dia.sin-atencion {
+    background: #444;
+    color: #999;
+}
+
+.dia.completo {
+    background: #d63031;
+    color: white;
+}
+
+.dia.pocos {
+    background: #f1c40f;
+    color: #222;
+}
+
+.dia.muchos {
+    background: #2ECC71;
+    color: white;
+}

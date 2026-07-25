@@ -1,6 +1,8 @@
 let ultimoTurno = null;
 let turnoPendiente = null;
 let diasTrabajo = [];
+let añoCalendario = new Date().getFullYear();
+let mesCalendario = new Date().getMonth();
 import { mostrarToast } from "./toast.js";
 import { HORARIOS, SERVICIOS } from "./config.js";
 import { db } from "./firebase.js";
@@ -30,17 +32,11 @@ function cargarServicios() {
     });
 
 }
-function iniciarPagina() {
+async function iniciarPagina() {
 
     cargarServicios();
-    configurarCalendario();
-
-    document
-        .getElementById("fecha")
-        .addEventListener(
-            "change",
-            actualizarHorarios
-        );
+    await configurarCalendario();
+    await crearCalendario();
     document
         .getElementById("btnConfirmarResumen")
         .addEventListener(
@@ -294,6 +290,31 @@ async function actualizarHorarios() {
     console.log("Cantidad de turnos:", resultado.size);
     console.log("Horarios ocupados:", ocupados);
 }
+async function obtenerDisponibilidadMes(año, mes) {
+    const consulta =
+        await getDocs(collection(db, "turnos"));
+    const disponibilidad = {};
+    consulta.forEach(doc => {
+        const turno = doc.data();
+        const [anioTurno, mesTurno] = turno.fecha
+            .split("-")
+            .map(Number);
+        if (
+            anioTurno !== año ||
+            (mesTurno - 1) !== mes
+        ) {
+            return;
+        }
+        if (!disponibilidad[turno.fecha]) {
+            disponibilidad[turno.fecha] = 0;
+        }
+        disponibilidad[turno.fecha]++;
+    });
+    console.log("Disponibilidad del mes:");
+    console.log(disponibilidad);
+
+    return disponibilidad;
+}
 async function horarioDisponible(fecha, hora) {
 
     const consulta = query(
@@ -318,12 +339,109 @@ async function configurarCalendario() {
     diasTrabajo =
         configuracion.diasTrabajo || [];
 
-    const fecha =
-        document.getElementById("fecha");
+    await crearCalendario();
+}
+async function crearCalendario() {
 
-    fecha.min =
-        new Date().toISOString().split("T")[0];
+    const contenedor =
+        document.getElementById("calendario");
+    const año = añoCalendario;
+    const mes = mesCalendario;
+    const disponibilidad =
+        await obtenerDisponibilidadMes(año, mes);
+    const primerDia =
+        new Date(año, mes, 1);
+    const ultimoDia =
+        new Date(año, mes + 1, 0);
+    const diasMes =
+        ultimoDia.getDate();
+    const inicio =
+        primerDia.getDay();
+    const nombres = [
+        "Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"
+    ];
+    const fechaCalendario = new Date(añoCalendario, mesCalendario);
+    let html = `
+           <div class="calendario-header">
+             <h3>${fechaCalendario.toLocaleDateString("es-AR", { month: "long", year: "numeric" })
+        }</h3>
+            </div>
+              <div class="calendario-grid">
+            `;
+    nombres.forEach(nombre => {
+        html += `
+              <div class="dia-semana">${nombre}</div>
+            `;
+    });
+    for (let i = 0; i < inicio; i++) {
+        html += `
+             <div class="dia vacio"></div>
+            `;
+    }
+    for (let dia = 1; dia <= diasMes; dia++) {
+        const fechaTexto =
+            `${año}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
 
+        const ocupados = disponibilidad[fechaTexto] || 0;
+        console.log(fechaTexto, ocupados);
+
+        const fechaDia = new Date(año, mes, dia);
+
+        const hoySinHora = new Date();
+        hoySinHora.setHours(0, 0, 0, 0);
+
+        let clase = "";
+
+        if (fechaDia < hoySinHora) {
+            clase = "pasado";
+        }
+        else if (!diasTrabajo.includes(fechaDia.getDay())) {
+            clase = "sin-atencion";
+        }
+        else if (ocupados >= HORARIOS.length) {
+            clase = "completo";
+        }
+        else if (ocupados >= HORARIOS.length - 2) {
+            clase = "pocos";
+        }
+        else {
+            clase = "muchos";
+        }
+        html += `
+<button
+    class="dia ${clase}"
+    data-fecha="${fechaTexto}"
+    type="button">
+    ${dia}
+</button>
+`;
+
+    }
+    html += "</div>";
+    contenedor.innerHTML = html;
+    contenedor
+        .querySelectorAll(".dia.muchos, .dia.pocos")
+        .forEach(boton => {
+            boton.addEventListener("click", () => {
+                document
+                    .querySelectorAll(".dia")
+                    .forEach(d => d.classList.remove("activo"));
+                boton.classList.add("activo");
+                const dia =
+                    boton.dataset.dia;
+                const hoy =
+                    new Date();
+                const año =
+                    hoy.getFullYear();
+                const mes =
+                    hoy.getMonth();
+                const fecha = boton.dataset.fecha;
+
+                document.getElementById("fecha").value = fecha;
+
+                actualizarHorarios();
+            });
+        });
 }
 function enviarWhatsApp() {
 
