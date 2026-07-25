@@ -512,7 +512,7 @@ function mostrarResumen(turno) {
 
         <span>Seña a pagar</span>
 
-        <strong>$5.000</strong>
+        <strong>$10.000</strong>
 
     </div>
     <p class="nota-reserva"> 💖 La seña será descontada del precio final del servicio el día de tu turno. </p>

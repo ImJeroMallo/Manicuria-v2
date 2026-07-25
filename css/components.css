@@ -1,5 +1,5 @@
 .card {
-    background: #242424;
+    background: #000000;
     border: 1px solid #383838;
     border-radius: 22px;
     padding: 40px;
@@ -73,7 +73,7 @@ label {
 
 .btn-secundario {
     background: transparent;
-    color: var(--rosa);
+    color: var(--blanco);
     border: 2px solid var(--rosa);
 }
 
