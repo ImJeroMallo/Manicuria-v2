@@ -1,155 +1,61 @@
-import { formatearFecha, obtenerColorEstado } from "./utils.js";
-import { HORARIOS } from "./config.js";
-function crearCabecera(fecha) {
-
-    return `
-
-        <div class="dia">
-
-            📅 ${formatearFecha(fecha)}
-
-        </div>
-
-    `;
-
-}
-function crearHorarioLibre(hora) {
-
-    return `
-
-        <div class="turno disponible">
-
-            <h2>🕒 ${hora}</h2>
-
-            <h3>⚪ Disponible</h3>
-
-        </div>
-
-    `;
-
-}
-function crearBotones(turno) {
-
-    return `
-
-        <div class="acciones">
-
-            <button
-                class="btn-confirmar"
-                onclick="cambiarEstado('${turno.id}','Confirmado')">
-
-                ✅ Confirmar
-
-            </button>
-
-            <button
-                class="btn-realizado"
-                onclick="cambiarEstado('${turno.id}','Realizado')">
-
-                ✔ Realizado
-
-            </button>
-
-            <button
-                class="btn-cancelar"
-                onclick="cambiarEstado('${turno.id}','Cancelado')">
-
-                ❌ Cancelar
-
-            </button>
-
-            <button
-                class="btn-mover"
-                onclick="moverHorario('${turno.id}')">
-
-                🔄 Mover
-
-            </button>
-
-            <button
-                class="btn-eliminar"
-                onclick="eliminarTurno('${turno.id}')">
-
-                🗑 Eliminar
-
-            </button>
-
-        </div>
-
-    `;
-
-}
-function crearTarjetaTurno(turno) {
-
-    return `
-
-        <div
-            class="turno"
-            style="
-                border-left:8px solid ${obtenerColorEstado(turno.estado)}
-            ">
-
-            <h2>👤 ${turno.nombre}</h2>
-
-            <p>📞 ${turno.telefono}</p>
-
-            <p>💅 ${turno.servicio}</p>
-
-            <p>💰 $${turno.precio.toLocaleString("es-AR")}</p>
-
-            <h2>🕒 ${turno.hora}</h2>
-
-            <span
-                class="estado"
-                style="
-                    background:${obtenerColorEstado(turno.estado)};
-                ">
-
-                ${turno.estado}
-
-            </span>
-
-            ${crearBotones(turno)}
-
-        </div>
-
-    `;
-
-}
-function crearAgendaDia(fecha, turnosDelDia) {
-
-    let html = crearCabecera(fecha);
-
-    HORARIOS.forEach((hora) => {
-
-        const turno =
-            turnosDelDia.find(
-                t => t.hora === hora
-            );
-
-        if (turno) {
-
-            html += crearTarjetaTurno(turno);
-
-        } else {
-
-            html += crearHorarioLibre(hora);
-
+import { obtenerTurnos } from "./turnos.js";
+import {
+    crearAgendaDia,
+    crearContenidoAgenda
+} from "./renderAgenda.js";
+async function mostrarAgenda(fecha = null) {
+    if (!fecha) {
+        fecha = document.getElementById("buscarFecha").value;
+    }
+    if (!fecha) return;
+    const lista = document.getElementById("listaTurnos");
+    lista.innerHTML = "";
+    const consulta = await obtenerTurnos();
+    const turnosDelDia = [];
+    consulta.forEach((documento) => {
+        const turno = documento.data();
+        if (turno.fecha === fecha) {
+            turnosDelDia.push({ id: documento.id, ...turno });
         }
-
     });
-
-    return html;
-
+    lista.innerHTML = crearAgendaDia(fecha, turnosDelDia);
+    console.log("Fecha buscada:", fecha);
+    console.log("Turnos encontrados:", turnosDelDia);
 }
-export {
-
-    crearCabecera,
-
-    crearTarjetaTurno,
-
-    crearHorarioLibre,
-
-    crearAgendaDia
-
-};
+function abrirAgenda() {
+    document
+        .getElementById("modalAgenda")
+        .style.display = "flex";
+}
+async function abrirAgendaDia(fecha) {
+    const consulta = await obtenerTurnos();
+    const turnos = [];
+    consulta.forEach(doc => {
+        const turno = doc.data();
+        if (turno.fecha === fecha) {
+            turnos.push({ id: doc.id, ...turno });
+        }
+    });
+    const html =
+        crearContenidoAgenda(fecha, turnos)
+    // Cerrar ventana semanal
+    document
+        .getElementById("modalSemana")
+        .style.display = "none";
+    // Mostrar agenda del día
+    document
+        .getElementById("contenidoAgenda")
+        .innerHTML = html;
+    document
+        .getElementById("tituloAgenda")
+        .textContent = "Agenda del día";
+    document
+        .getElementById("modalAgenda")
+        .style.display = "flex";
+}
+function cerrarAgenda() {
+    document
+        .getElementById("modalAgenda")
+        .style.display = "none";
+}
+export { crearAgendaDia, mostrarAgenda, abrirAgenda, abrirAgendaDia, cerrarAgenda };

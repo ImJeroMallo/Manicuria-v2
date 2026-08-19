@@ -1,6 +1,10 @@
+import { crearCabecera, crearHorarioLibre, crearBotones, crearTarjetaTurno, crearAgendaDia, crearContenidoAgenda } from "./renderAgenda.js";
+import { mostrarHoy, mostrarManana, mostrarPendientes, abrirSemana, cerrarSemana } from "./dashboardViews.js";
+import { editarTurno, confirmarPago, abrirWhatsApp } from "./accionesTurno.js";
+import { cargarDashboard } from "./dashboard.js";
 import { abrirModal, cerrarModal } from "./modal.js";
-import { crearAgendaDia } from "./agenda.js";
-import { eliminarTurno, cambiarEstado, obtenerTurnos } from "./turnos.js";
+import { mostrarAgenda, abrirAgenda, abrirAgendaDia, cerrarAgenda } from "./agenda.js";
+import { eliminarTurno, cambiarEstado, guardarTurno, obtenerTurnos, moverTurno } from "./turnos.js";
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
 import { obtenerConfiguracion, guardarDiasTrabajo } from "./configuracion.js";
@@ -16,17 +20,30 @@ onAuthStateChanged(
         }
         mostrarHoy();
         await cargarDiasTrabajo();
+        await cargarDashboard();
+        document
+            .getElementById("cardHoy")
+            .addEventListener(
+                "click",
+                mostrarHoy
+            );
+        document
+            .getElementById("cardManana")
+            .addEventListener(
+                "click",
+                mostrarManana
+            );
+        document
+            .getElementById("cardPendientes")
+            .addEventListener(
+                "click",
+                mostrarPendientes
+            );
         document
             .getElementById("btnBuscar")
             .addEventListener(
                 "click",
-                buscarAgenda
-            );
-        document
-            .getElementById("btnHoy")
-            .addEventListener(
-                "click",
-                mostrarHoy
+                () => mostrarAgenda()
             );
         document
             .getElementById("btnCancelarModal")
@@ -40,14 +57,34 @@ onAuthStateChanged(
                 "click",
                 guardarConfiguracionDias
             );
+        document
+            .getElementById("cardSemana")
+            .addEventListener(
+                "click",
+                abrirSemana
+            );
 
+        document
+            .getElementById("btnCerrarSemana")
+            .addEventListener(
+                "click",
+                cerrarSemana
+            );
+        document
+            .getElementById("btnCerrarAgenda")
+            .addEventListener(
+                "click",
+                cerrarAgenda
+            );
     }
 );
 window.eliminarTurno = async (id) => {
 
     await eliminarTurno(id);
 
-    buscarAgenda();
+    mostrarAgenda();
+
+    await cargarDashboard();
 
 };
 
@@ -55,69 +92,13 @@ window.cambiarEstado = async (id, estado) => {
 
     await cambiarEstado(id, estado);
 
-    buscarAgenda();
+    mostrarAgenda();
+
+    await cargarDashboard();
 
 };
-async function buscarAgenda() {
 
-    const fecha =
-        document.getElementById("buscarFecha").value;
 
-    if (!fecha) return;
-
-    const lista =
-        document.getElementById("listaTurnos");
-
-    lista.innerHTML = "";
-
-    const consulta =
-        await obtenerTurnos();
-
-    const turnosDelDia = [];
-
-    consulta.forEach((documento) => {
-
-        const turno = documento.data();
-
-        if (turno.fecha === fecha) {
-
-            turnosDelDia.push({
-
-                id: documento.id,
-
-                ...turno
-
-            });
-
-        }
-
-    });
-    lista.innerHTML =
-        crearAgendaDia(
-            fecha,
-            turnosDelDia
-        );
-}
-function mostrarHoy() {
-
-    const hoy = new Date();
-
-    const año = hoy.getFullYear();
-
-    const mes = String(
-        hoy.getMonth() + 1
-    ).padStart(2, "0");
-
-    const dia = String(
-        hoy.getDate()
-    ).padStart(2, "0");
-
-    document.getElementById("buscarFecha").value =
-        `${año}-${mes}-${dia}`;
-
-    buscarAgenda();
-
-}
 async function cargarDiasTrabajo() {
 
     const configuracion =
@@ -165,3 +146,6 @@ function moverHorario(turno) {
     abrirModal("mover", turno);
 
 }
+window.editarTurno = editarTurno;
+window.confirmarPago = confirmarPago;
+window.abrirWhatsApp = abrirWhatsApp;

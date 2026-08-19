@@ -1,17 +1,5 @@
 import { db } from "./firebase.js";
-
-import {
-    deleteDoc,
-    doc,
-    updateDoc,
-    addDoc,
-    collection,
-    query,
-    where,
-    getDocs,
-    orderBy
-}
-    from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+import { deleteDoc, doc, updateDoc, addDoc, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 async function eliminarTurno(id) {
 
     if (!confirm("¿Eliminar turno?")) {

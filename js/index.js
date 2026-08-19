@@ -358,12 +358,31 @@ async function crearCalendario() {
     ];
     const fechaCalendario = new Date(añoCalendario, mesCalendario);
     let html = `
-           <div class="calendario-header">
-             <h3>${fechaCalendario.toLocaleDateString("es-AR", { month: "long", year: "numeric" })
-        }</h3>
-            </div>
-              <div class="calendario-grid">
-            `;
+    <div class="calendario-header">
+
+        <button
+            id="btnMesAnterior"
+            type="button">
+            ◀
+        </button>
+
+        <h3>
+    ${fechaCalendario.toLocaleDateString("es-AR", {
+        month: "long",
+        year: "numeric"
+    }).replace(" de ", " ")}
+</h3>
+
+        <button
+            id="btnMesSiguiente"
+            type="button">
+            ▶
+        </button>
+
+    </div>
+
+    <div class="calendario-grid">
+`;
     nombres.forEach(nombre => {
         html += `
               <div class="dia-semana">${nombre}</div>
@@ -415,6 +434,54 @@ async function crearCalendario() {
     }
     html += "</div>";
     contenedor.innerHTML = html;
+    const btnAnterior =
+        document.getElementById("btnMesAnterior");
+
+    const btnSiguiente =
+        document.getElementById("btnMesSiguiente");
+
+    btnAnterior.addEventListener("click", async () => {
+
+        const hoy = new Date();
+
+        const mesActual =
+            hoy.getFullYear() * 12 + hoy.getMonth();
+
+        const mesSeleccionado =
+            añoCalendario * 12 + mesCalendario;
+
+        // No permitir retroceder antes del mes actual
+        if (mesSeleccionado <= mesActual) {
+            return;
+        }
+
+        mesCalendario--;
+
+        if (mesCalendario < 0) {
+
+            mesCalendario = 11;
+            añoCalendario--;
+
+        }
+
+        await crearCalendario();
+
+    });
+
+    btnSiguiente.addEventListener("click", async () => {
+
+        mesCalendario++;
+
+        if (mesCalendario > 11) {
+
+            mesCalendario = 0;
+            añoCalendario++;
+
+        }
+
+        await crearCalendario();
+
+    });
     contenedor
         .querySelectorAll(".dia.muchos, .dia.pocos")
         .forEach(boton => {

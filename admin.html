@@ -13,6 +13,29 @@
 
     <h1>Panel de Administrador</h1>
 
+    <div id="dashboard" class="dashboard">
+
+        <div class="dashboard-card" id="cardHoy">
+            <h3>📅 Hoy</h3>
+            <p id="turnosHoy">0 turnos</p>
+        </div>
+
+        <div class="dashboard-card" id="cardManana">
+            <h3>📅 Mañana</h3>
+            <p id="turnosManana">0 turnos</p>
+        </div>
+
+        <div class="dashboard-card" id="cardSemana">
+            <h3>📊 Esta semana</h3>
+            <p id="turnosSemana">0 turnos</p>
+        </div>
+
+        <div class="dashboard-card" id="cardPendientes">
+            <h3>🟡 Pendientes</h3>
+            <p id="cantidadPendientes">0</p>
+        </div>
+
+    </div>
     <div class="buscador">
 
         <label><strong>Buscar turnos por fecha</strong></label>
@@ -24,13 +47,6 @@
             🔍 Buscar
 
         </button>
-
-        <button id="btnHoy">
-
-            📅 Hoy
-
-        </button>
-
     </div>
 
     <div id="listaTurnos"></div>
@@ -146,12 +162,30 @@
                 Domingo
             </label>
         </div>
-        <button id="btnGuardarDias">
-
+        <button id="btnGuardarDias">1
             Guardar días de trabajo
-
         </button>
-
+    </div>
+    <div id="modalAgenda" class="modal">
+        <div class="modal-contenido agenda">
+            <h2 id="tituloAgenda">
+                Agenda del día
+            </h2>
+            <div id="contenidoAgenda">
+            </div>
+            <button id="btnCerrarAgenda" class="btn-secundario">
+                Cerrar
+            </button>
+        </div>
+    </div>
+    <div id="modalSemana" class="modal">
+        <div class="modal-contenido semana">
+            <h2>📅 Agenda semanal</h2>
+            <div id="contenidoSemana"></div>
+            <button id="btnCerrarSemana">
+                Cerrar
+            </button>
+        </div>
     </div>
     <script type="module" src="js/admin.js"></script>
 </body>
