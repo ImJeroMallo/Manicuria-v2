@@ -395,3 +395,45 @@ button:hover {
     background: #27AE60;
     color: white;
 }
+
+/* Contenedor relativo */
+.date-search-container {
+    position: relative;
+    display: inline-block;
+    margin: 16px 0;
+}
+
+/* Botón personalizado estilo rosa */
+.btn-buscar-fecha {
+    background-color: #ff2d75;
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-buscar-fecha:hover {
+    background-color: #e0266b;
+}
+
+.btn-buscar-fecha:active {
+    transform: scale(0.98);
+}
+
+/* Input oculto que no rompe el flujo */
+.input-fecha-oculto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}

@@ -36,17 +36,15 @@
         </div>
 
     </div>
-    <div class="buscador">
-
-        <label><strong>Buscar turnos por fecha</strong></label>
-
-        <input type="date" id="buscarFecha">
-
-        <button id="btnBuscar">
-
-            🔍 Buscar
-
+    <!-- Contenedor del nuevo botón -->
+    <div class="date-search-container">
+        <button type="button" id="btnBuscarFecha" class="btn-buscar-fecha">
+            <span>🔍</span>
+            <span>Buscar fecha en específico</span>
         </button>
+
+        <!-- Input de fecha nativo (oculto visualmente) -->
+        <input type="date" id="inputFechaOculto" class="input-fecha-oculto" />
     </div>
 
     <div id="listaTurnos"></div>
