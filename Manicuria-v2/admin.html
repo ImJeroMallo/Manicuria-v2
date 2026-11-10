@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Panel de Administrador</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/admin.css">
+
+</head>
+
+<body>
+
+    <h1>Panel de Administrador</h1>
+
+    <div id="dashboard" class="dashboard">
+
+        <div class="dashboard-card" id="cardHoy">
+            <h3>📅 Hoy</h3>
+            <p id="turnosHoy">0 turnos</p>
+        </div>
+
+        <div class="dashboard-card" id="cardManana">
+            <h3>📅 Mañana</h3>
+            <p id="turnosManana">0 turnos</p>
+        </div>
+
+        <div class="dashboard-card" id="cardSemana">
+            <h3>📊 Esta semana</h3>
+            <p id="turnosSemana">0 turnos</p>
+        </div>
+
+        <div class="dashboard-card" id="cardPendientes">
+            <h3>🟡 Pendientes</h3>
+            <p id="cantidadPendientes">0</p>
+        </div>
+
+    </div>
+    <!-- Contenedor del nuevo botón -->
+    <div class="date-search-container">
+        <button type="button" id="btnBuscarFecha" class="btn-buscar-fecha">
+            <span>🔍</span>
+            <span>Buscar fecha en específico</span>
+        </button>
+
+        <!-- Input de fecha nativo (oculto visualmente) -->
+        <input type="date" id="inputFechaOculto" class="input-fecha-oculto" />
+    </div>
+
+    <div id="listaTurnos"></div>
+    <div id="modalTurno" class="modal">
+
+        <div class="modal-contenido">
+
+            <h2 id="tituloModal">
+
+                Turno
+
+            </h2>
+
+            <input id="modalNombre" type="text" placeholder="Nombre">
+
+            <input id="modalTelefono" type="text" placeholder="Teléfono">
+
+            <select id="modalServicio">
+
+                <option value="18000">
+
+                    Soft Gel
+
+                </option>
+
+                <option value="15000">
+
+                    Capping
+
+                </option>
+
+                <option value="12000">
+
+                    Semipermanente / Esmaltado
+
+                </option>
+
+            </select>
+
+            <input id="modalPrecio" type="number">
+
+            <input id="modalFecha" type="date">
+
+            <select id="modalHora"></select>
+
+            <select id="modalEstado">
+
+                <option>Pendiente</option>
+
+                <option>Confirmado</option>
+
+                <option>Realizado</option>
+
+                <option>Cancelado</option>
+
+            </select>
+
+            <div class="acciones-modal">
+
+                <button id="btnGuardarModal">
+
+                    Guardar
+
+                </button>
+
+                <button id="btnCancelarModal">
+
+                    Cancelar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="card">
+
+        <h2>⚙ Configuración de agenda</h2>
+        <div id="diasTrabajo">
+            <label>
+                <input type="checkbox" id="lunes" value="1">
+                Lunes
+            </label>
+
+            <label>
+                <input type="checkbox" id="martes" value="2">
+                Martes
+            </label>
+
+            <label>
+                <input type="checkbox" id="miercoles" value="3">
+                Miércoles
+            </label>
+
+            <label>
+                <input type="checkbox" id="jueves" value="4">
+                Jueves
+            </label>
+
+            <label>
+                <input type="checkbox" id="viernes" value="5">
+                Viernes
+            </label>
+
+            <label>
+                <input type="checkbox" id="sabado" value="6">
+                Sábado
+            </label>
+
+            <label>
+                <input type="checkbox" id="domingo" value="0">
+                Domingo
+            </label>
+        </div>
+        <button id="btnGuardarDias">1
+            Guardar días de trabajo
+        </button>
+    </div>
+    <div id="modalAgenda" class="modal">
+        <div class="modal-contenido agenda">
+            <h2 id="tituloAgenda">
+                Agenda del día
+            </h2>
+            <div id="contenidoAgenda">
+            </div>
+            <button id="btnCerrarAgenda" class="btn-secundario">
+                Cerrar
+            </button>
+        </div>
+    </div>
+    <div id="modalSemana" class="modal">
+        <div class="modal-contenido semana">
+            <h2>📅 Agenda semanal</h2>
+            <div id="contenidoSemana"></div>
+            <button id="btnCerrarSemana">
+                Cerrar
+            </button>
+        </div>
+    </div>
+    <!-- Estadísticas mensuales: solo cuentan los turnos realizados -->
+    <section class="estadisticas-container">
+        <div class="estadisticas-header">
+            <div>
+                <h2>📊 Estadísticas del negocio</h2>
+                <p>Resumen de ganancias.</p>
+            </div>
+            <label for="mesEstadisticas">
+                Mes a consultar
+                <input type="month" id="mesEstadisticas">
+            </label>
+        </div>
+
+        <div class="metrics-container">
+            <div class="metric-card">
+                <h3>Turnos realizados</h3>
+                <p id="total-turnos-mes">0</p>
+            </div>
+            <div class="metric-card">
+                <h3>Servicios realizados</h3>
+                <p id="total-servicios-mes">0</p>
+            </div>
+            <div class="metric-card highlight">
+                <h3>Ganancias del mes</h3>
+                <p id="ganancias-mes">$0</p>
+            </div>
+        </div>
+
+        <div class="metric-card tabla-servicios-card">
+            <h3>Detalle por servicio</h3>
+            <div class="tabla-servicios-contenedor">
+                <table class="tabla-servicios">
+                    <thead>
+                        <tr>
+                            <th>Servicio</th>
+                            <th>Cantidad</th>
+                            <th>Precio acumulado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detalle-servicios-mes">
+                        <tr>
+                            <td colspan="3">Todavía no hay servicios realizados este mes.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <script type="module" src="js/admin.js"></script>
+</body>
+
+</html>

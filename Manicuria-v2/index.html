@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina del cliente</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <header class="hero">
+                <img src="img/logo.jpg" class="logo" alt="Atenea Nails">
+                <h1 class="titulo-marca"> ✨ Atenea Nails ✨</h1>
+                <p>💅 Reservá tu turno 💅</p>
+            </header>
+            <input type="text" id="nombre" placeholder="Nombre">
+            <input type="text" id="telefono" placeholder="Teléfono de contacto">
+            <select id="servicio"></select>
+            <!-- Botón para mostrar/ocultar las ventanas -->
+            <div class="info-servicio-container">
+                <button type="button" id="btnInfoServicios" class="btn-secundario">
+                    🤔 ¿Qué es cada servicio?
+                </button>
+            </div>
+            <!-- Contenedor principal que se muestra/oculta -->
+            <div id="contenedorVentanasServicios" class="oculto">
+                <!-- El contenedor que habilita el scroll horizontal -->
+                <div class="contenedor-ventanas-scroll">
+                    <!-- Las ventanas se generan por JS acá adentro -->
+                </div>
+            </div>
+            <div id="calendario" class="calendario"></div>
+            <input type="hidden" id="fecha">
+            <h3 class="seccion-formulario">
+                🕒 Horarios disponibles
+            </h3>
+            <div id="horarios" class="horarios-grid"></div>
+            <input type="hidden" id="hora">
+            <div id="resumenSeleccion" class="resumen-seleccion">
+                Aún no seleccionaste un horario.
+            </div>
+            <p id="estadoHorarios"></p>
+            <div class="botones">
+
+                <button id="btnReservar" onclick="reservar()">
+                    💳 Pagar seña y reservar
+                </button>
+
+                <button class="btn-secundario" onclick="enviarWhatsApp()">
+                    💬 Ya pagué la seña
+                </button>
+
+            </div>
+            <hr>
+        </div>
+        <div id="modalResumen" class="modal">
+
+            <div class="modal-contenido">
+
+                <div class="modal-header">
+
+                    <img src="img/logo.jpg" class="logo-modal" alt="Atenea Nails">
+
+                    <h2>🧾 Resumen de tu reserva</h2>
+
+                    <p>
+                        Revisá que los datos sean correctos antes de continuar con el pago.
+                    </p>
+
+                </div>
+
+                <div id="contenidoResumen"></div>
+
+                <div class="acciones-modal">
+
+                    <button id="btnCancelarResumen" class="btn-secundario">
+
+                        Cancelar
+
+                    </button>
+
+                    <button id="btnConfirmarResumen">
+
+                        Confirmar y pagar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <script type="module" src="js/index.js"></script>
+</body>
+
+</html>
